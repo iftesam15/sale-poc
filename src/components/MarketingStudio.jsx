@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Megaphone, 
   Sparkles, 
@@ -17,14 +17,25 @@ import {
 import { MARKETING_PRESETS } from '../data/mockData';
 
 export default function MarketingStudio({ selectedSector, inventory }) {
-  const presets = MARKETING_PRESETS[selectedSector] || MARKETING_PRESETS['boutique'];
   const [activePresetIndex, setActivePresetIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
-  const [campaignPosts, setCampaignPosts] = useState(presets);
+  const [campaignPosts, setCampaignPosts] = useState(() => MARKETING_PRESETS[selectedSector] || MARKETING_PRESETS['boutique']);
 
-  const activePost = campaignPosts[activePresetIndex] || campaignPosts[0];
+  // Sync campaigns whenever the sector changes
+  useEffect(() => {
+    const updated = MARKETING_PRESETS[selectedSector] || MARKETING_PRESETS['boutique'];
+    setCampaignPosts(updated);
+    setActivePresetIndex(0);
+  }, [selectedSector]);
+
+  const activePost = campaignPosts[activePresetIndex] || campaignPosts[0] || {
+    title: 'Campaign',
+    content: '',
+    tags: [],
+    cta: 'Learn More'
+  };
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -56,7 +67,7 @@ export default function MarketingStudio({ selectedSector, inventory }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', width: '100%', maxWidth: '100%', minWidth: 0 }}>
       {/* Header */}
       <div className="card" style={{ padding: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
@@ -80,11 +91,11 @@ export default function MarketingStudio({ selectedSector, inventory }) {
       </div>
 
       {/* Main Studio Grid: Left Campaign Generator, Right Social Mockup Preview */}
-      <div className="grid-2" style={{ gridTemplateColumns: '1.1fr 0.9fr' }}>
+      <div className="marketing-grid">
         {/* Left: Campaign Presets & AI Generator */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', minWidth: 0, width: '100%' }}>
           {/* AI Generator Box */}
-          <div className="card">
+          <div className="card" style={{ minWidth: 0 }}>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <Sparkles size={16} color="var(--cyan-primary)" />
               Instant AI Campaign Generator
@@ -96,15 +107,17 @@ export default function MarketingStudio({ selectedSector, inventory }) {
                 placeholder="e.g. Write an Eid festive campaign for Handloom Jamdani in Banglish with 10% discount..."
                 value={customPrompt}
                 onChange={(e) => setCustomPrompt(e.target.value)}
+                style={{ width: '100%', boxSizing: 'border-box' }}
               />
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+                <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)', flex: '1 1 220px' }}>
                   Supports: Bangla, Banglish, English • Automatic Hashtag & CTA optimization
                 </span>
                 <button 
                   className="btn btn-primary btn-sm" 
                   onClick={handleGenerateCustomCampaign}
                   disabled={isGenerating || !customPrompt.trim()}
+                  style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
                 >
                   <Sparkles size={14} />
                   <span>{isGenerating ? 'Synthesizing Copy...' : 'Generate Social Copy'}</span>
@@ -114,12 +127,12 @@ export default function MarketingStudio({ selectedSector, inventory }) {
           </div>
 
           {/* Preset Selector */}
-          <div className="card">
+          <div className="card" style={{ minWidth: 0 }}>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem' }}>
               Pre-Trained Sector Campaigns ({campaignPosts.length})
             </h4>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', minWidth: 0 }}>
               {campaignPosts.map((post, idx) => {
                 const isActive = idx === activePresetIndex;
                 return (
@@ -132,14 +145,30 @@ export default function MarketingStudio({ selectedSector, inventory }) {
                       background: isActive ? 'rgba(6, 182, 212, 0.1)' : 'var(--bg-secondary)',
                       border: `1px solid ${isActive ? 'var(--cyan-primary)' : 'var(--border-subtle)'}`,
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      boxSizing: 'border-box'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontWeight: 700, fontSize: '0.88rem' }}>{post.title}</span>
-                      <span className="sku-badge" style={{ fontSize: '0.68rem' }}>{post.tags[0]}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                      <span style={{ fontWeight: 700, fontSize: '0.88rem', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                        {post.title}
+                      </span>
+                      <span className="sku-badge" style={{ fontSize: '0.68rem', flexShrink: 0 }}>
+                        {post.tags[0]}
+                      </span>
                     </div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.35rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <div style={{ 
+                      fontSize: '0.78rem', 
+                      color: 'var(--text-muted)', 
+                      marginTop: '0.35rem', 
+                      overflow: 'hidden', 
+                      textOverflow: 'ellipsis', 
+                      whiteSpace: 'nowrap',
+                      minWidth: 0,
+                      width: '100%'
+                    }}>
                       {post.content.replace(/\n/g, ' ')}
                     </div>
                   </div>
@@ -150,15 +179,16 @@ export default function MarketingStudio({ selectedSector, inventory }) {
         </div>
 
         {/* Right: Live Social Post Mockup (Facebook / Instagram) */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 0, width: '100%', boxSizing: 'border-box' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#1877f2' }}></div>
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#1877f2', flexShrink: 0 }}></div>
               <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Facebook / Instagram Feed Preview</span>
             </div>
             <button 
               className="btn btn-outline btn-sm" 
               onClick={() => handleCopy(activePost.content)}
+              style={{ flexShrink: 0 }}
             >
               {copied ? <Check size={14} color="var(--emerald-primary)" /> : <Copy size={14} />}
               <span>{copied ? 'Copied to Clipboard!' : 'Copy Caption'}</span>
@@ -170,10 +200,13 @@ export default function MarketingStudio({ selectedSector, inventory }) {
             background: 'var(--bg-secondary)', 
             border: '1px solid var(--border-medium)', 
             borderRadius: 'var(--radius-md)',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box'
           }}>
             {/* Post Header */}
-            <div style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', gap: '0.65rem', borderBottom: '1px solid var(--border-subtle)' }}>
+            <div style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', gap: '0.65rem', borderBottom: '1px solid var(--border-subtle)', minWidth: 0 }}>
               <div style={{ 
                 width: 38, 
                 height: 38, 
@@ -184,11 +217,12 @@ export default function MarketingStudio({ selectedSector, inventory }) {
                 justifyContent: 'center',
                 fontWeight: 800,
                 color: '#fff',
-                fontSize: '0.85rem'
+                fontSize: '0.85rem',
+                flexShrink: 0
               }}>
                 TA
               </div>
-              <div>
+              <div style={{ minWidth: 0, overflow: 'hidden' }}>
                 <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>Telesto Boutique BD</div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>Sponsored • Dhaka, Bangladesh</div>
               </div>
@@ -199,7 +233,7 @@ export default function MarketingStudio({ selectedSector, inventory }) {
               <img 
                 src={selectedSector === 'handicrafts' ? '/jute_handicrafts.jpg' : '/jamdani_saree.jpg'} 
                 alt="Post creative" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
               />
               <div style={{ 
                 position: 'absolute', 
@@ -221,7 +255,14 @@ export default function MarketingStudio({ selectedSector, inventory }) {
             </div>
 
             {/* Post Body Text */}
-            <div style={{ padding: '1rem', whiteSpace: 'pre-line', fontSize: '0.86rem', lineHeight: 1.55 }}>
+            <div style={{ 
+              padding: '1rem', 
+              whiteSpace: 'pre-line', 
+              fontSize: '0.86rem', 
+              lineHeight: 1.55,
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere'
+            }}>
               {activePost.content}
             </div>
 
@@ -241,7 +282,9 @@ export default function MarketingStudio({ selectedSector, inventory }) {
               borderTop: '1px solid var(--border-subtle)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '0.75rem'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -252,7 +295,7 @@ export default function MarketingStudio({ selectedSector, inventory }) {
                 </span>
               </div>
 
-              <button className="btn btn-primary btn-sm">
+              <button className="btn btn-primary btn-sm" style={{ flexShrink: 0 }}>
                 <Send size={13} />
                 <span>Send WhatsApp Inquiry</span>
               </button>

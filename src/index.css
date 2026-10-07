@@ -136,11 +136,21 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100vh;
 }
 
-/* Navigation Header */
-.top-header {
+/* Sticky Platform Header & Navigation */
+.sticky-header-container {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 90;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .sticky-header-container {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Navigation Header */
+.top-header {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   background: var(--bg-glass);
@@ -379,10 +389,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Main Navigation Bar (Pillars & Engine) */
 .sub-nav-bar {
-  background: var(--bg-secondary);
+  background: rgba(12, 19, 34, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border-subtle);
   padding: 0.5rem 1.5rem;
   overflow-x: auto;
+}
+
+[data-theme="light"] .sub-nav-bar {
+  background: rgba(241, 245, 249, 0.9);
 }
 
 .sub-nav-inner {
@@ -1114,25 +1130,34 @@ h1, h2, h3, h4, h5, h6 {
 /* Grids */
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
 .grid-4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.25rem;
 }
 
+/* AI Marketing Studio Grid */
+.marketing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+}
+
 @media (max-width: 1024px) {
-  .grid-2, .grid-3, .grid-4 {
-    grid-template-columns: 1fr;
+  .grid-2, .grid-3, .grid-4, .marketing-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 

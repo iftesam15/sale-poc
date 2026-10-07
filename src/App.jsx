@@ -166,24 +166,26 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Top Brand & System Bar */}
-      <Header 
-        selectedSector={selectedSector}
-        onSectorChange={setSelectedSector}
-        onResetData={handleResetData}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      {/* Sticky Platform Header & Navigation Bar */}
+      <div className="sticky-header-container">
+        <Header 
+          selectedSector={selectedSector}
+          onSectorChange={setSelectedSector}
+          onResetData={handleResetData}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
 
-      {/* Navigation across 3 Pillars and Architecture */}
-      <Navigation 
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
-        counts={{
-          unreadChats: unreadChatsCount,
-          lowStockItems: lowStockCount,
-        }}
-      />
+        {/* Navigation across 3 Pillars and Architecture */}
+        <Navigation 
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          counts={{
+            unreadChats: unreadChatsCount,
+            lowStockItems: lowStockCount,
+          }}
+        />
+      </div>
 
       {/* Main Container */}
       <main className="main-content">
