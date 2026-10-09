@@ -8,7 +8,8 @@ import {
   Megaphone, 
   BrainCircuit, 
   Database,
-  BadgePercent
+  BadgePercent,
+  LineChart
 } from 'lucide-react';
 
 export const TABS = [
@@ -19,6 +20,7 @@ export const TABS = [
   { id: 'crm', label: 'Unified Customer CRM', pillar: 'SELL', icon: Users },
   { id: 'marketing', label: 'AI Marketing Studio', pillar: 'SELL', icon: Megaphone },
   { id: 'copilot', label: 'Executive Copilot & Demand', pillar: 'INTELLIGENCE', icon: BrainCircuit },
+  { id: 'analytics', label: 'Business Analytics', pillar: 'INTELLIGENCE', icon: LineChart },
   { id: 'architecture', label: 'TBOP Architecture & Schemas', pillar: 'FOUNDATION', icon: Database },
   { id: 'pricing', label: 'Plans & Pricing', pillar: 'BANGLADESH', icon: BadgePercent },
 ];

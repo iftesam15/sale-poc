@@ -606,3 +606,379 @@ Order your sustainable companion today!
     },
   ],
 };
+
+const ANALYTICS_RANGES = {
+  '7d': { id: '7d', label: '7 days', days: 7, buckets: 7, span: 7 / 30, lift: 1.12 },
+  '30d': { id: '30d', label: '30 days', days: 30, buckets: 10, span: 1, lift: 1 },
+  '90d': { id: '90d', label: '90 days', days: 90, buckets: 12, span: 3.05, lift: 1 },
+};
+
+const ANALYTICS_PROFILES = {
+  boutique: {
+    monthlyGmv: 1840000,
+    aov: 4490,
+    margin: 0.34,
+    repeat: 0.41,
+    rto: 0.128,
+    conversion: 0.24,
+    growth: 0.186,
+    products: [
+      { name: 'Dhakai Royal Jamdani Saree', price: 8850, share: 0.38, margin: 0.36, returns: 0.04 },
+      { name: 'Aristocrat Embroidered Panjabi', price: 4000, share: 0.27, margin: 0.32, returns: 0.06 },
+      { name: 'Festive Floral 3-Piece Kurti Set', price: 2950, share: 0.18, margin: 0.41, returns: 0.05 },
+      { name: 'Handloom Cotton Saree', price: 3200, share: 0.11, margin: 0.33, returns: 0.03 },
+      { name: 'Eid Waistcoat Set', price: 2650, share: 0.06, margin: 0.38, returns: 0.07 },
+    ],
+    cities: [
+      { name: 'Dhaka', share: 0.58 },
+      { name: 'Chattogram', share: 0.14 },
+      { name: 'Sylhet', share: 0.09 },
+      { name: 'Rajshahi', share: 0.07 },
+      { name: 'Khulna', share: 0.06 },
+      { name: 'Other districts', share: 0.06 },
+    ],
+    payments: [
+      { id: 'bkash', name: 'bKash', share: 0.44, color: '#e2136e' },
+      { id: 'cod', name: 'Cash on delivery', share: 0.31, color: '#06b6d4' },
+      { id: 'nagad', name: 'Nagad', share: 0.17, color: '#f7941d' },
+      { id: 'rocket', name: 'Rocket', share: 0.08, color: '#a855f7' },
+    ],
+    channels: [
+      { id: 'whatsapp', name: 'WhatsApp', share: 0.49 },
+      { id: 'messenger', name: 'Messenger', share: 0.33 },
+      { id: 'phone', name: 'Phone', share: 0.11 },
+      { id: 'instagram', name: 'Instagram', share: 0.07 },
+    ],
+    couriers: [
+      { name: 'Steadfast', share: 0.46, hours: 18, rto: 0.09 },
+      { name: 'Pathao', share: 0.34, hours: 14, rto: 0.11 },
+      { name: 'RedX', share: 0.2, hours: 26, rto: 0.16 },
+    ],
+    hours: [4, 6, 9, 14, 18, 22, 16, 11, 8, 6, 5, 7],
+  },
+  handicrafts: {
+    monthlyGmv: 620000,
+    aov: 1680,
+    margin: 0.42,
+    repeat: 0.29,
+    rto: 0.074,
+    conversion: 0.19,
+    growth: 0.142,
+    products: [
+      { name: 'Julhas Export-Grade Handwoven Jute Tote', price: 1450, share: 0.34, margin: 0.46, returns: 0.02 },
+      { name: 'Artisanal Braided Jute Storage Baskets', price: 2200, share: 0.22, margin: 0.4, returns: 0.03 },
+      { name: 'Rajshahi Pure Silk Nakshi Kantha', price: 3800, share: 0.2, margin: 0.38, returns: 0.04 },
+      { name: 'Patuakhali Handcrafted Terracotta Urn', price: 850, share: 0.14, margin: 0.48, returns: 0.05 },
+      { name: 'Jute Gift Hamper', price: 1650, share: 0.1, margin: 0.44, returns: 0.03 },
+    ],
+    cities: [
+      { name: 'Dhaka', share: 0.41 },
+      { name: 'Export desk', share: 0.22 },
+      { name: 'Chattogram', share: 0.13 },
+      { name: 'Rajshahi', share: 0.1 },
+      { name: 'Sylhet', share: 0.08 },
+      { name: 'Other districts', share: 0.06 },
+    ],
+    payments: [
+      { id: 'bkash', name: 'bKash', share: 0.36, color: '#e2136e' },
+      { id: 'cod', name: 'Cash on delivery', share: 0.22, color: '#06b6d4' },
+      { id: 'nagad', name: 'Nagad', share: 0.14, color: '#f7941d' },
+      { id: 'rocket', name: 'Bank / TT', share: 0.28, color: '#22d3ee' },
+    ],
+    channels: [
+      { id: 'whatsapp', name: 'WhatsApp', share: 0.38 },
+      { id: 'messenger', name: 'Messenger', share: 0.21 },
+      { id: 'phone', name: 'Phone', share: 0.17 },
+      { id: 'instagram', name: 'Catalogue', share: 0.24 },
+    ],
+    couriers: [
+      { name: 'Steadfast', share: 0.4, hours: 22, rto: 0.06 },
+      { name: 'Pathao', share: 0.28, hours: 16, rto: 0.08 },
+      { name: 'Sundarban', share: 0.32, hours: 40, rto: 0.05 },
+    ],
+    hours: [6, 8, 11, 13, 12, 10, 9, 8, 7, 6, 5, 5],
+  },
+  jewelry: {
+    monthlyGmv: 980000,
+    aov: 6100,
+    margin: 0.48,
+    repeat: 0.36,
+    rto: 0.045,
+    conversion: 0.16,
+    growth: 0.094,
+    products: [
+      { name: 'Heritage Filigree Brass Choker', price: 3200, share: 0.31, margin: 0.52, returns: 0.02 },
+      { name: 'Dhaka Antique Silver Jhumka', price: 2400, share: 0.24, margin: 0.5, returns: 0.03 },
+      { name: 'Bridal Gold-Plated Set', price: 12800, share: 0.22, margin: 0.41, returns: 0.01 },
+      { name: 'Custom Name Pendant', price: 4500, share: 0.14, margin: 0.55, returns: 0.02 },
+      { name: 'Gift Box Pair', price: 1800, share: 0.09, margin: 0.46, returns: 0.04 },
+    ],
+    cities: [
+      { name: 'Dhaka', share: 0.64 },
+      { name: 'Sylhet', share: 0.12 },
+      { name: 'Chattogram', share: 0.1 },
+      { name: 'UK / family gift', share: 0.07 },
+      { name: 'Rajshahi', share: 0.04 },
+      { name: 'Other districts', share: 0.03 },
+    ],
+    payments: [
+      { id: 'bkash', name: 'bKash', share: 0.52, color: '#e2136e' },
+      { id: 'cod', name: 'Cash on delivery', share: 0.14, color: '#06b6d4' },
+      { id: 'nagad', name: 'Nagad', share: 0.21, color: '#f7941d' },
+      { id: 'rocket', name: 'Rocket', share: 0.13, color: '#a855f7' },
+    ],
+    channels: [
+      { id: 'whatsapp', name: 'WhatsApp', share: 0.57 },
+      { id: 'messenger', name: 'Messenger', share: 0.22 },
+      { id: 'phone', name: 'Phone', share: 0.14 },
+      { id: 'instagram', name: 'Instagram', share: 0.07 },
+    ],
+    couriers: [
+      { name: 'Steadfast', share: 0.51, hours: 20, rto: 0.04 },
+      { name: 'Pathao', share: 0.22, hours: 12, rto: 0.05 },
+      { name: 'RedX', share: 0.27, hours: 24, rto: 0.07 },
+    ],
+    hours: [3, 5, 8, 12, 16, 20, 18, 14, 10, 8, 6, 4],
+  },
+  retail_food: {
+    monthlyGmv: 410000,
+    aov: 540,
+    margin: 0.28,
+    repeat: 0.52,
+    rto: 0.062,
+    conversion: 0.41,
+    growth: 0.21,
+    products: [
+      { name: 'Raw Wild Sundarban Honey', price: 850, share: 0.36, margin: 0.33, returns: 0.02 },
+      { name: 'Cold-Pressed Wooden Ghani Mustard Oil', price: 420, share: 0.29, margin: 0.24, returns: 0.01 },
+      { name: 'Date-Palm Gur Jar', price: 380, share: 0.15, margin: 0.3, returns: 0.02 },
+      { name: 'Bakery Mix Box', price: 650, share: 0.12, margin: 0.27, returns: 0.04 },
+      { name: 'Weekly Grocery Bundle', price: 980, share: 0.08, margin: 0.22, returns: 0.03 },
+    ],
+    cities: [
+      { name: 'Dhaka', share: 0.72 },
+      { name: 'Narayanganj', share: 0.09 },
+      { name: 'Gazipur', share: 0.07 },
+      { name: 'Chattogram', share: 0.05 },
+      { name: 'Sylhet', share: 0.04 },
+      { name: 'Other districts', share: 0.03 },
+    ],
+    payments: [
+      { id: 'bkash', name: 'bKash', share: 0.33, color: '#e2136e' },
+      { id: 'cod', name: 'Cash on delivery', share: 0.41, color: '#06b6d4' },
+      { id: 'nagad', name: 'Nagad', share: 0.19, color: '#f7941d' },
+      { id: 'rocket', name: 'Rocket', share: 0.07, color: '#a855f7' },
+    ],
+    channels: [
+      { id: 'whatsapp', name: 'WhatsApp', share: 0.44 },
+      { id: 'messenger', name: 'Messenger', share: 0.36 },
+      { id: 'phone', name: 'Phone', share: 0.16 },
+      { id: 'instagram', name: 'Instagram', share: 0.04 },
+    ],
+    couriers: [
+      { name: 'Pathao', share: 0.48, hours: 8, rto: 0.05 },
+      { name: 'Steadfast', share: 0.31, hours: 16, rto: 0.07 },
+      { name: 'Shop rider', share: 0.21, hours: 3, rto: 0.02 },
+    ],
+    hours: [8, 10, 7, 6, 8, 12, 14, 16, 11, 8, 6, 5],
+  },
+};
+
+const CHANNEL_BIAS = {
+  whatsapp: [1.22, 1.05, 0.92, 0.86, 0.78],
+  messenger: [0.82, 1.18, 1.16, 0.96, 0.9],
+  phone: [1.08, 0.88, 0.76, 1.28, 0.84],
+  instagram: [0.7, 0.82, 1.35, 1.12, 1.24],
+};
+
+const HOUR_LABELS = ['9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p'];
+const ANALYTICS_END = new Date('2026-10-08T00:00:00');
+
+function analyticsSeries(count, seed) {
+  const raw = Array.from({ length: count }, (_, index) => {
+    const t = count === 1 ? 0.5 : index / (count - 1);
+    const wave = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 + seed);
+    const drift = 0.82 + t * 0.36;
+    return 0.45 + wave * drift;
+  });
+  const sum = raw.reduce((total, value) => total + value, 0);
+  return raw.map((value) => value / sum);
+}
+
+function formatAnalyticsDay(date) {
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+function shiftDate(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function trendLabels(range) {
+  if (range.id === '7d') {
+    return Array.from({ length: 7 }, (_, index) => formatAnalyticsDay(shiftDate(ANALYTICS_END, index - 6)));
+  }
+  if (range.id === '30d') {
+    return Array.from({ length: 10 }, (_, index) => {
+      const end = shiftDate(ANALYTICS_END, -((9 - index) * 3));
+      const start = shiftDate(end, -2);
+      return `${formatAnalyticsDay(start).split(' ')[0]}–${formatAnalyticsDay(end)}`;
+    });
+  }
+  return Array.from({ length: 12 }, (_, index) => {
+    const start = shiftDate(ANALYTICS_END, -((11 - index) * 7) - 6);
+    return formatAnalyticsDay(start);
+  });
+}
+
+function weightedShares(items, bias) {
+  const raw = items.map((item, index) => item.share * (bias?.[index] ?? 1));
+  const sum = raw.reduce((total, value) => total + value, 0);
+  return raw.map((value) => value / sum);
+}
+
+export function getShopAnalytics(sectorId, rangeId = '30d', channelId = 'all') {
+  const profile = ANALYTICS_PROFILES[sectorId] || ANALYTICS_PROFILES.boutique;
+  const range = ANALYTICS_RANGES[rangeId] || ANALYTICS_RANGES['30d'];
+  const channel = profile.channels.find((item) => item.id === channelId) || null;
+  const channelShare = channel ? channel.share : 1;
+  const bias = channel ? CHANNEL_BIAS[channel.id] : null;
+  const productShares = weightedShares(profile.products, bias);
+
+  const gmv = Math.round(profile.monthlyGmv * range.span * range.lift * channelShare);
+  const orders = Math.max(1, Math.round(gmv / profile.aov));
+  const grossProfit = Math.round(gmv * profile.margin);
+  const growth = range.id === '7d' ? profile.growth + 0.04 : range.id === '90d' ? profile.growth * 0.72 : profile.growth;
+
+  const weights = analyticsSeries(range.buckets, profile.monthlyGmv / 100000);
+  const labels = trendLabels(range);
+  const trend = labels.map((label, index) => ({
+    label,
+    gmv: Math.round(gmv * weights[index]),
+    orders: Math.max(1, Math.round(orders * weights[index])),
+  }));
+
+  const products = profile.products.map((product, index) => {
+    const revenue = Math.round(gmv * productShares[index]);
+    const units = Math.max(1, Math.round(revenue / product.price));
+    return {
+      ...product,
+      share: productShares[index],
+      revenue,
+      units,
+      profit: Math.round(revenue * product.margin),
+    };
+  }).sort((a, b) => b.revenue - a.revenue);
+
+  const payments = profile.payments.map((item) => ({
+    ...item,
+    amount: Math.round(gmv * item.share),
+  }));
+  const channels = profile.channels.map((item) => ({
+    ...item,
+    amount: Math.round((profile.monthlyGmv * range.span * range.lift) * item.share),
+    orders: Math.max(1, Math.round((profile.monthlyGmv * range.span * range.lift * item.share) / profile.aov)),
+  }));
+  const cities = profile.cities.map((item) => ({
+    ...item,
+    amount: Math.round(gmv * item.share),
+    orders: Math.max(1, Math.round(orders * item.share)),
+  }));
+  const couriers = profile.couriers.map((item) => ({
+    ...item,
+    orders: Math.max(1, Math.round(orders * item.share)),
+  }));
+
+  const inquiries = Math.round(orders / profile.conversion);
+  const quoted = Math.round(inquiries * Math.min(0.86, profile.conversion + 0.34));
+  const dispatched = Math.round(orders * 0.93);
+  const delivered = Math.round(orders * (1 - profile.rto) * 0.97);
+  const funnel = [
+    { id: 'inbox', label: 'Inbox inquiries', value: inquiries },
+    { id: 'quote', label: 'Quotes sent', value: quoted },
+    { id: 'order', label: 'Orders confirmed', value: orders },
+    { id: 'dispatch', label: 'Dispatched', value: dispatched },
+    { id: 'delivered', label: 'Delivered', value: delivered },
+  ];
+
+  const buyers = Math.max(1, Math.round(orders * (1 - profile.repeat * 0.35)));
+  const customers = [
+    { id: 'new', label: 'New buyers', share: 1 - profile.repeat, color: '#06b6d4' },
+    { id: 'repeat', label: 'Repeat buyers', share: profile.repeat * 0.72, color: '#10b981' },
+    { id: 'vip', label: 'VIP repeat', share: profile.repeat * 0.28, color: '#f59e0b' },
+  ].map((item) => ({
+    ...item,
+    count: Math.max(1, Math.round(buyers * item.share)),
+  }));
+
+  const hourPeak = Math.max(...profile.hours);
+  const hours = profile.hours.map((value, index) => ({
+    label: HOUR_LABELS[index],
+    value,
+    share: value / hourPeak,
+  }));
+
+  const top = products[0];
+  const bestCourier = [...couriers].sort((a, b) => a.rto - b.rto)[0];
+  const busiest = [...hours].sort((a, b) => b.value - a.value)[0];
+  const cod = payments.find((item) => item.id === 'cod');
+
+  const insights = [
+    {
+      tone: 'amber',
+      title: 'Cash on delivery returns',
+      text: `${(profile.rto * 100).toFixed(1)}% of COD parcels come back. ${cod.name} is ${(cod.share * 100).toFixed(0)}% of takings. A small bKash rebate on the Dhaka lane is the usual fix.`,
+    },
+    {
+      tone: 'cyan',
+      title: `${top.name.split(' ').slice(0, 3).join(' ')} leads the ledger`,
+      text: `${top.units.toLocaleString('en-US')} units, ৳${top.revenue.toLocaleString('en-US')}, ${(top.margin * 100).toFixed(0)}% margin. It is ${(top.share * 100).toFixed(0)}% of this view.`,
+    },
+    {
+      tone: 'emerald',
+      title: `${bestCourier.name} is the cleanest courier`,
+      text: `${bestCourier.orders.toLocaleString('en-US')} parcels, about ${bestCourier.hours} hours to the door, ${(bestCourier.rto * 100).toFixed(0)}% returns.`,
+    },
+    {
+      tone: 'purple',
+      title: `Inbox is busiest at ${busiest.label.replace('a', ' AM').replace('p', ' PM')}`,
+      text: 'Quotes sent in that hour close faster. Staff the WhatsApp desk before the evening rush, not after it.',
+    },
+  ];
+
+  return {
+    sectorId,
+    range,
+    channelId: channel ? channel.id : 'all',
+    channelName: channel ? channel.name : 'All channels',
+    gmv,
+    orders,
+    aov: profile.aov,
+    grossProfit,
+    margin: profile.margin,
+    repeat: profile.repeat,
+    rto: profile.rto,
+    conversion: profile.conversion,
+    growth,
+    deltas: {
+      gmv: growth,
+      orders: growth - 0.018,
+      aov: 0.032,
+      profit: growth + 0.011,
+      repeat: 0.04,
+      rto: -0.012,
+    },
+    trend,
+    products,
+    payments,
+    channels,
+    cities,
+    couriers,
+    funnel,
+    customers,
+    buyers,
+    hours,
+    insights,
+  };
+}

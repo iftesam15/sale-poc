@@ -10,6 +10,7 @@ import MarketingStudio from './components/MarketingStudio';
 import AICopilotIntelligence from './components/AICopilotIntelligence';
 import ArchitectureViewer from './components/ArchitectureViewer';
 import Pricing from './components/Pricing';
+import BusinessAnalytics from './components/BusinessAnalytics';
 
 import { 
   SECTORS, 
@@ -311,6 +312,15 @@ export default function App() {
           <Pricing
             selectedSector={selectedSector}
             onExplore={setActiveTab}
+          />
+        )}
+
+        {activeTab === 'analytics' && (
+          <BusinessAnalytics
+            selectedSector={selectedSector}
+            orders={orders}
+            customers={customers}
+            inventory={inventory}
           />
         )}
       </main>
