@@ -9,6 +9,7 @@ import CustomerCRM from './components/CustomerCRM';
 import MarketingStudio from './components/MarketingStudio';
 import AICopilotIntelligence from './components/AICopilotIntelligence';
 import ArchitectureViewer from './components/ArchitectureViewer';
+import Pricing from './components/Pricing';
 
 import { 
   SECTORS, 
@@ -190,6 +191,7 @@ export default function App() {
       {/* Main Container */}
       <main className="main-content">
         {/* Hero Context Banner */}
+        {activeTab !== 'pricing' && (
         <section className="hero-banner-card">
           <div className="hero-banner-text">
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: currentSectorObj.color, fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.35rem' }}>
@@ -233,6 +235,7 @@ export default function App() {
             />
           </div>
         </section>
+        )}
 
         {/* View Switcher by Tab */}
         {activeTab === 'workflow' && (
@@ -301,6 +304,13 @@ export default function App() {
             customers={customers}
             orders={orders}
             copilotSchedules={copilotSchedules}
+          />
+        )}
+
+        {activeTab === 'pricing' && (
+          <Pricing
+            selectedSector={selectedSector}
+            onExplore={setActiveTab}
           />
         )}
       </main>

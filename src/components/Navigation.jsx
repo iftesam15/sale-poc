@@ -7,7 +7,8 @@ import {
   Users, 
   Megaphone, 
   BrainCircuit, 
-  Database
+  Database,
+  BadgePercent
 } from 'lucide-react';
 
 export const TABS = [
@@ -19,6 +20,7 @@ export const TABS = [
   { id: 'marketing', label: 'AI Marketing Studio', pillar: 'SELL', icon: Megaphone },
   { id: 'copilot', label: 'Executive Copilot & Demand', pillar: 'INTELLIGENCE', icon: BrainCircuit },
   { id: 'architecture', label: 'TBOP Architecture & Schemas', pillar: 'FOUNDATION', icon: Database },
+  { id: 'pricing', label: 'Plans & Pricing', pillar: 'BANGLADESH', icon: BadgePercent },
 ];
 
 export default function Navigation({ activeTab, onSelectTab, counts }) {
