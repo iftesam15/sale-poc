@@ -4,6 +4,7 @@ import {
   MessageSquare, 
   Package, 
   ShoppingBag, 
+  Truck,
   Users, 
   Megaphone, 
   BrainCircuit, 
@@ -17,6 +18,7 @@ export const TABS = [
   { id: 'chat', label: 'Omnichannel AI Inbox', pillar: 'SELL', icon: MessageSquare },
   { id: 'inventory', label: 'Variant Inventory Matrix', pillar: 'OPERATE', icon: Package },
   { id: 'orders', label: 'Digital Orders & Payments', pillar: 'OPERATE', icon: ShoppingBag },
+  { id: 'steadfast', label: 'Steadfast Courier', pillar: 'OPERATE', icon: Truck },
   { id: 'crm', label: 'Unified Customer CRM', pillar: 'SELL', icon: Users },
   { id: 'marketing', label: 'AI Marketing Studio', pillar: 'SELL', icon: Megaphone },
   { id: 'copilot', label: 'Executive Copilot & Demand', pillar: 'INTELLIGENCE', icon: BrainCircuit },
@@ -51,6 +53,18 @@ export default function Navigation({ activeTab, onSelectTab, counts }) {
                   fontWeight: 700 
                 }}>
                   {counts.unreadChats}
+                </span>
+              )}
+              {tab.id === 'steadfast' && counts.packQueue > 0 && (
+                <span style={{ 
+                  background: 'var(--rose-primary)', 
+                  color: '#fff', 
+                  fontSize: '0.68rem', 
+                  padding: '0.1rem 0.4rem', 
+                  borderRadius: '999px',
+                  fontWeight: 700 
+                }}>
+                  {counts.packQueue} to pack
                 </span>
               )}
               {tab.id === 'inventory' && counts.lowStockItems > 0 && (

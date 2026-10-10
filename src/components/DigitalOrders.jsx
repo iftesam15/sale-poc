@@ -68,10 +68,15 @@ export default function DigitalOrders({
   const stepDeliveryStatus = (orderId) => {
     setOrders(prev => prev.map(ord => {
       if (ord.id === orderId) {
-        let nextStatus = ord.delivery_status;
-        if (ord.delivery_status === 'PENDING') nextStatus = 'CONFIRMED';
-        else if (ord.delivery_status === 'CONFIRMED') nextStatus = 'DISPATCHED';
-        else if (ord.delivery_status === 'DISPATCHED') nextStatus = 'DELIVERED';
+        const nextStatus = {
+          PENDING: 'CONFIRMED',
+          AWAITING_PACK: 'PACKED',
+          CONFIRMED: 'DISPATCHED',
+          PACKED: 'PICKUP_REQUESTED',
+          PICKUP_REQUESTED: 'DISPATCHED',
+          DISPATCHED: 'DELIVERED',
+          OUT_FOR_DELIVERY: 'DELIVERED',
+        }[ord.delivery_status] || ord.delivery_status;
 
         return { ...ord, delivery_status: nextStatus };
       }
@@ -245,12 +250,13 @@ export default function DigitalOrders({
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                           <span className={`status-badge ${
                             ord.delivery_status === 'DELIVERED' ? 'delivered' :
-                            ord.delivery_status === 'DISPATCHED' ? 'dispatched' : 'cod'
+                            ord.delivery_status === 'DISPATCHED' || ord.delivery_status === 'OUT_FOR_DELIVERY' ? 'dispatched' :
+                            ord.delivery_status === 'AWAITING_PACK' ? 'low-stock' : 'cod'
                           }`}>
                             {ord.delivery_status}
                           </span>
                           <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                            {ord.courier} ({ord.tracking_code})
+                            {ord.courier}{ord.tracking_code ? ` (${ord.tracking_code})` : ' · awaiting booking'}
                           </span>
                         </div>
                       </td>

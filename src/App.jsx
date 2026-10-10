@@ -11,6 +11,7 @@ import AICopilotIntelligence from './components/AICopilotIntelligence';
 import ArchitectureViewer from './components/ArchitectureViewer';
 import Pricing from './components/Pricing';
 import BusinessAnalytics from './components/BusinessAnalytics';
+import SteadfastCourier from './components/SteadfastCourier';
 
 import { 
   SECTORS, 
@@ -143,6 +144,88 @@ export default function App() {
     setCopilotSchedules(prev => [newSchedule, ...prev]);
   };
 
+  // Customer storefront checkout that waits on the merchant pack desk
+  const handleSteadfastCheckout = ({ customer, variant, quantity, address, payment_method }) => {
+    const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
+    const qty = Math.max(1, quantity || 1);
+    const insideDhaka = (customer.city || '').toLowerCase().includes('dhaka') || address.toLowerCase().includes('dhaka');
+    const deliveryFee = insideDhaka ? 100 : 150;
+    const totalAmount = (variant.price_bdt * qty) + deliveryFee;
+    const isCod = payment_method !== 'BKASH';
+
+    setInventory(prev => prev.map(item => {
+      if (item.variant_id === variant.variant_id) {
+        return { ...item, stock_qty: Math.max(0, item.stock_qty - qty) };
+      }
+      return item;
+    }));
+
+    const existingCustomer = customers.find(c => c.phone === customer.phone);
+    const newOrder = {
+      id: orderId,
+      customer_id: existingCustomer?.id || 'CUST-NEW',
+      customer_name: customer.name,
+      phone: customer.phone,
+      variant_id: variant.variant_id,
+      product_name: variant.product_name,
+      quantity: qty,
+      unit_price: variant.price_bdt,
+      delivery_fee: deliveryFee,
+      total_price_bdt: totalAmount,
+      payment_status: isCod ? 'COD_PENDING' : 'BKASH_VERIFIED',
+      trx_id: isCod ? 'N/A (Cash on Delivery)' : `BK${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+      delivery_status: 'AWAITING_PACK',
+      courier: 'Steadfast Courier',
+      tracking_code: null,
+      address,
+      created_at: 'Just now',
+      steadfast: {
+        stage: 'placed',
+        weight_kg: null,
+        consignment_id: null,
+        events: [
+          {
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            title: 'Customer placed order',
+            detail: isCod ? 'Cash on delivery from the shop page' : 'bKash paid at checkout',
+          },
+        ],
+      },
+    };
+
+    setOrders(prev => [newOrder, ...prev]);
+
+    setCustomers(prev => {
+      const existing = prev.find(c => c.phone === customer.phone);
+      if (existing) {
+        return prev.map(c => {
+          if (c.phone !== customer.phone) return c;
+          return {
+            ...c,
+            orders_count: c.orders_count + 1,
+            total_spent_bdt: c.total_spent_bdt + totalAmount,
+            last_active: 'Just now',
+          };
+        });
+      }
+      return [{
+        id: `CUST-00${prev.length + 1}`,
+        name: customer.name,
+        phone: customer.phone,
+        channel: 'storefront',
+        orders_count: 1,
+        total_spent_bdt: totalAmount,
+        tier: 'New Customer',
+        city: customer.city || 'Dhaka',
+        notes: 'Placed a Steadfast checkout from the shop page.',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+        last_active: 'Just now',
+      }, ...prev];
+    });
+
+    return orderId;
+  };
+
   // Convert Chat conversation directly into Digital Order
   const handleConvertChatToOrder = ({ customer, variant, channel }) => {
     handleAtomicOrderCreation({
@@ -164,6 +247,11 @@ export default function App() {
   const sectorInventory = inventory.filter(i => i.sector === selectedSector);
   const lowStockCount = sectorInventory.filter(i => i.stock_qty <= i.safety_threshold).length;
   const unreadChatsCount = chatThreads.reduce((sum, t) => sum + (t.unread || 0), 0);
+  const packQueueCount = orders.filter((order) => {
+    if (order.courier !== 'Steadfast Courier') return false;
+    if (order.steadfast?.stage) return ['placed', 'seen', 'packed'].includes(order.steadfast.stage);
+    return order.delivery_status === 'AWAITING_PACK' || order.delivery_status === 'PACKED';
+  }).length;
   const totalRevenue = orders.reduce((sum, o) => sum + (o.total_price_bdt || 0), 0);
 
   return (
@@ -185,6 +273,7 @@ export default function App() {
           counts={{
             unreadChats: unreadChatsCount,
             lowStockItems: lowStockCount,
+            packQueue: packQueueCount,
           }}
         />
       </div>
@@ -262,6 +351,15 @@ export default function App() {
             inventory={inventory}
             setInventory={setInventory}
             selectedSector={selectedSector}
+          />
+        )}
+
+        {activeTab === 'steadfast' && (
+          <SteadfastCourier
+            inventory={sectorInventory}
+            orders={orders}
+            setOrders={setOrders}
+            onCustomerCheckout={handleSteadfastCheckout}
           />
         )}
 
